@@ -1,6 +1,6 @@
 # Sledovač testů a učení
 
- Webová aplikace pro efektivní správu školních povinností, plánování testů a sledování pokroku v učení[cite: 12].  Projekt je rozdělen na technickou část (aplikace) a projektovou dokumentaci.
+ Webová aplikace pro efektivní správu školních povinností, plánování testů a sledování pokroku v učení. Projekt je rozdělen na technickou část (aplikace) a projektovou dokumentaci.
 
 ## Struktura projektu
 
@@ -14,7 +14,7 @@ Moderní fullstack aplikace postavená na TypeScriptu.
 * **Presentations**: Prezentace pro jednotlivé milníky projektu.
 
 ## Klíčové funkce
-* **Správa předmětů**: CRUD operace pro definici školních předmětů[cite: 29, 30].
+* **Správa předmětů**: CRUD operace pro definici školních předmětů.
 * **Sledování testů**: Kalendářní přehled termínů a typů zkoušek (písemka, ústní, projekt).
 * **Záznamy o učení**: Evidence času stráveného studiem propojená s konkrétními testy.
 * **Uživatelské role**: Rozlišení mezi Studentem a Správcem skupiny (možnost sdílení termínů)
