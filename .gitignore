@@ -11,9 +11,3 @@ sledovac-testu/backend/dist/
 # Documentations & Archives
 presentations/Documentations/*.zip
 presentations/Documentations/*.pdf
-# Pokud chcete ignorovat i prezentace, odkomentujte řádek níže:
-# presentations/Presentations/*.pptx
-
-# Frontend (Vite)
-sledovac-testu/frontend/dist/
-sledovac-testu/frontend/node_modules/
