@@ -13,8 +13,8 @@ Moderní fullstack aplikace postavená na TypeScriptu.
  Obsahuje výstupy projektu.
 * **Presentations**: Prezentace pro jednotlivé milníky projektu.
 
-## Klíčové funkce (dle specifikace)
-*  **Správa předmětů**: CRUD operace pro definici školních předmětů[cite: 29, 30].
+## Klíčové funkce
+* **Správa předmětů**: CRUD operace pro definici školních předmětů[cite: 29, 30].
 * **Sledování testů**: Kalendářní přehled termínů a typů zkoušek (písemka, ústní, projekt).
 * **Záznamy o učení**: Evidence času stráveného studiem propojená s konkrétními testy.
 * **Uživatelské role**: Rozlišení mezi Studentem a Správcem skupiny (možnost sdílení termínů)
