@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+.DS_Store
+
+# Backend specific
+sledovac-testu/backend/.env
+sledovac-testu/backend/*.sqlite
+sledovac-testu/backend/*.sqlite-journal
+sledovac-testu/backend/dist/
+
+# Documentations & Archives
+presentations/Documentations/*.zip
+presentations/Documentations/*.pdf
+# Pokud chcete ignorovat i prezentace, odkomentujte řádek níže:
+# presentations/Presentations/*.pptx
+
+# Frontend (Vite)
+sledovac-testu/frontend/dist/
+sledovac-testu/frontend/node_modules/
