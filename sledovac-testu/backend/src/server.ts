@@ -2,6 +2,7 @@ import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { initDb } from './db.js';
+import authRoutes from './routes/auth.js';
 
 config();
 
@@ -23,3 +24,5 @@ initDb().then(() => {
 app.get('/', (req: Request, res: Response) => {
   res.send('Sledovač testů a učení API running');
 });
+
+app.use('/api/auth', authRoutes);
