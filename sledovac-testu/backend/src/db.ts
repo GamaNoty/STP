@@ -4,7 +4,7 @@ import { open, Database } from 'sqlite';
 export async function initDb(): Promise<Database> {
   const db = await open({
     filename: './database.sqlite',
-    driver: sqlite3.Database // Ujistěte se, že je to přesně takto
+    driver: sqlite3.Database
   });
 
   await db.exec('PRAGMA foreign_keys = ON');
