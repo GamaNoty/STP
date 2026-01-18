@@ -10,7 +10,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   jwt.verify(token, process.env.JWT_SECRET as string, (err: any, user: any) => {
     if (err) return res.status(403).json({ message: 'Neplatný token' });
     
-    // Přidáme data uživatele do objektu požadavku pro další použití
     (req as any).user = user;
     next();
   });
