@@ -3,6 +3,9 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import { initDb } from './db.js';
 import authRoutes from './routes/auth.js';
+import subjectsRoutes from './routes/subjects.js';
+import testsRoutes from './routes/tests.js';
+import studyLogsRoutes from './routes/studyLogs.js';
 
 config();
 
@@ -26,3 +29,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/subjects', subjectsRoutes);
+app.use('/api/tests', testsRoutes);
+app.use('/api/studyLogs', studyLogsRoutes);
