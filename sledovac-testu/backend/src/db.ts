@@ -74,5 +74,10 @@ export async function initDb(): Promise<Database> {
     );
   `);
 
+  await db.exec(`
+    INSERT OR IGNORE INTO Roles (role_ID, name) VALUES (1, 'student');
+    INSERT OR IGNORE INTO Roles (role_ID, name) VALUES (2, 'admin');
+  `);
+
   return db;
 }
