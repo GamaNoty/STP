@@ -25,7 +25,7 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', authenticateToken, validate(StudyLogSchema), async (req, res) => {
+router.post('/', authenticateToken, validate(StudyLogSchema), async (req: Request, res: Response) => {
 
   const { test_ID, subject_ID, minutes } = req.body;
   const user_ID = req.user?.user_ID;

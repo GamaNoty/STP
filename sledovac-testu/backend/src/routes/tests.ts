@@ -26,7 +26,7 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', authenticateToken, validate(TestSchema), async (req, res) => {
+router.post('/', authenticateToken, validate(TestSchema), async (req: Request, res: Response) => {
   const { subject_ID, group_ID, name, date } = req.body;
   const user_ID = req.user?.user_ID;
 

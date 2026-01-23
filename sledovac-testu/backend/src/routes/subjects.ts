@@ -23,7 +23,7 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', authenticateToken, validate(SubjectSchema), async (req, res) => {
+router.post('/', authenticateToken, validate(SubjectSchema), async (req: Request, res: Response) => {
   const { name } = req.body;
   const user_ID = req.user?.user_ID;
 
@@ -42,7 +42,7 @@ router.post('/', authenticateToken, validate(SubjectSchema), async (req, res) =>
 router.put('/:id', authenticateToken, async (req: Request, res: Response) => {
   const { name } = req.body;
   const { id } = req.params;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
