@@ -7,6 +7,7 @@ sledovac-testu/backend/.env
 sledovac-testu/backend/*.sqlite
 sledovac-testu/backend/*.sqlite-journal
 sledovac-testu/backend/dist/
+sledovac-testu/backend/src/*.zip
 
 # Documentations & Archives
 presentations/Documentations/*.zip
