@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     const db = await initDb();
-    const user_ID = (req as any).user.user_ID;
+    const user_ID = req.user?.user_ID;
     const logs = await db.all('SELECT * FROM LearningRecords WHERE user_ID = ?', [user_ID]);
     res.json(logs);
   } catch (error) {
@@ -17,7 +17,7 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
 
 router.post('/', authenticateToken, async (req: Request, res: Response) => {
   const { test_ID, subject_ID, minutes } = req.body;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
@@ -33,7 +33,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
 
 router.delete('/:id', authenticateToken, async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
