@@ -1,8 +1,18 @@
 import { Router, type Request, type Response } from 'express';
 import { initDb } from '../db.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
+import { z } from 'zod'; // Import Zod
+import { validate } from '../middleware/validate.js';
 
 const router = Router();
+
+const StudyLogSchema = z.object({
+  body: z.object({
+    subject_ID: z.number().int().positive(),
+    test_ID: z.number().int().positive().nullable(),
+    minutes: z.number().int().min(1, "Doba studia musí být aspoň 1 minuta").max(1440)
+  })
+});
 
 router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
@@ -15,7 +25,8 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', authenticateToken, async (req: Request, res: Response) => {
+router.post('/', authenticateToken, validate(StudyLogSchema), async (req, res) => {
+
   const { test_ID, subject_ID, minutes } = req.body;
   const user_ID = req.user?.user_ID;
 
