@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express';
 import { initDb } from '../db.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
-import { z } from 'zod'; // Import Zod
+import { z } from 'zod';
 import { validate } from '../middleware/validate.js';
 
 const router = Router();
