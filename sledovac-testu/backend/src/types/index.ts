@@ -50,3 +50,10 @@ export interface LearningRecord {
   minutes: number;
   created_at: string;
 }
+
+export interface UserPayload {
+  user_ID: number;
+  Role_ID: number;
+  iat?: number;
+  exp?: number;
+}

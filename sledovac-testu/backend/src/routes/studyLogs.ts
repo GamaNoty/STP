@@ -1,13 +1,23 @@
 import { Router, type Request, type Response } from 'express';
 import { initDb } from '../db.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
+import { z } from 'zod';
+import { validate } from '../middleware/validate.js';
 
 const router = Router();
+
+const StudyLogSchema = z.object({
+  body: z.object({
+    subject_ID: z.number().int().positive(),
+    test_ID: z.number().int().positive().nullable(),
+    minutes: z.number().int().min(1, "Doba studia musí být aspoň 1 minuta").max(1440)
+  })
+});
 
 router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     const db = await initDb();
-    const user_ID = (req as any).user.user_ID;
+    const user_ID = req.user?.user_ID;
     const logs = await db.all('SELECT * FROM LearningRecords WHERE user_ID = ?', [user_ID]);
     res.json(logs);
   } catch (error) {
@@ -15,9 +25,10 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', authenticateToken, async (req: Request, res: Response) => {
+router.post('/', authenticateToken, validate(StudyLogSchema), async (req: Request, res: Response) => {
+
   const { test_ID, subject_ID, minutes } = req.body;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
@@ -33,7 +44,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
 
 router.delete('/:id', authenticateToken, async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();

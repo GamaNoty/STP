@@ -1,13 +1,24 @@
 import { Router, type Request, type Response } from 'express';
 import { initDb } from '../db.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
+import { z } from 'zod';
+import { validate } from '../middleware/validate.js';
 
 const router = Router();
+
+const TestSchema = z.object({
+  body: z.object({
+    subject_ID: z.number().int().positive("ID předmětu musí být číslo"),
+    group_ID: z.number().int().positive().nullable(),
+    name: z.string().min(3, "Název testu je příliš krátký"),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Datum musí být ve formátu RRRR-MM-DD")
+  })
+});
 
 router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     const db = await initDb();
-    const user_ID = (req as any).user.user_ID;
+    const user_ID = req.user?.user_ID;
     const tests = await db.all('SELECT * FROM Tests WHERE user_ID = ?', [user_ID]);
     res.json(tests);
   } catch (error) {
@@ -15,9 +26,9 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', authenticateToken, async (req: Request, res: Response) => {
+router.post('/', authenticateToken, validate(TestSchema), async (req: Request, res: Response) => {
   const { subject_ID, group_ID, name, date } = req.body;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
@@ -33,7 +44,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
 
 router.delete('/:id', authenticateToken, async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user_ID = (req as any).user.user_ID;
+  const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
