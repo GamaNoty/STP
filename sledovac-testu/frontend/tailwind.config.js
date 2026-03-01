@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Archivo', 'sans-serif'],
+      },
       colors: {
         brand: {
           bg: '#0A0A10',
@@ -17,10 +20,6 @@ export default {
           textMuted: '#8F8F9A',
         }
       },
-      backgroundImage: {
-        'red-gradient': 'linear-gradient(90deg, #b01a1a 0%, #e62020 100%)',
-        'sidebar-gradient': 'linear-gradient(180deg, #100f14 0%, #1a0808 100%)',
-      }
     },
   },
   plugins: [],
