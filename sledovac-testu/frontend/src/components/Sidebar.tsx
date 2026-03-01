@@ -20,11 +20,13 @@ export const Sidebar = () => {
   ];
 
   const accountNav = [
-    { name: "Profile", icon: User },
-    { name: "Sign In", icon: FileText },
-    { name: "Sign Up", icon: Rocket },
+    { name: "Profile", icon: User, path: "/profile" },
+    { name: "Sign In", icon: FileText, path: "/signin" },
+    { name: "Sign Up", icon: Rocket, path: "/signin" },
   ];
+
   const location = useLocation();
+  
   return (
     <aside className="w-64 h-screen bg-brand-sidebar relative flex flex-col border-r border-white/5 z-10">
       <div className="absolute bottom-0 left-0 w-full h-64 bg-red-900/20 blur-[80px] pointer-events-none rounded-tr-full"></div>
@@ -68,19 +70,26 @@ export const Sidebar = () => {
             Account pages
           </h2>
           <ul className="space-y-2">
-            {accountNav.map((item) => (
-              <li key={item.name}>
-                <a
-                  href="#"
-                  className="flex items-center gap-4 px-4 py-3 rounded-xl text-brand-textMuted hover:text-white hover:bg-white/5 transition-all duration-200"
-                >
-                  <div className="bg-brand-card p-1.5 rounded-lg border border-white/5">
-                    <item.icon size={16} className="text-brand-red" />
-                  </div>
-                  <span className="font-medium">{item.name}</span>
-                </a>
-              </li>
-            ))}
+            {accountNav.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ${
+                      isActive 
+                        ? "text-white bg-white/5" 
+                        : "text-brand-textMuted hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <div className="bg-brand-card p-1.5 rounded-lg border border-white/5">
+                      <item.icon size={16} className="text-brand-red" />
+                    </div>
+                    <span className="font-medium">{item.name}</span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
