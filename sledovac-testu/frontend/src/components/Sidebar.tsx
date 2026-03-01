@@ -1,5 +1,4 @@
 import {
-  BarChart2,
   CalendarDays,
   FileText,
   Home,
@@ -15,8 +14,7 @@ export const Sidebar = () => {
   const mainNav = [
     { name: "Dashboard", icon: Home, path: "/" },
     { name: "Testy", icon: CalendarDays, path: "/testy" },
-    { name: "Učení", icon: CalendarDays, path: "/uceni" },
-    { name: "Detail Testů", icon: BarChart2, path: "/detail" },
+    { name: "Kalendář", icon: CalendarDays, path: "/kalendar" },
     { name: "Skupiny", icon: Layers, path: "/skupiny" },
     { name: "Předměty", icon: Package, path: "/predmety" },
   ];
