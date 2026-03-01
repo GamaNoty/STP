@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Settings, Bell, User } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 export const TopNav = () => {
+  const location = useLocation();
+
+  const pageNames: Record<string, string> = {
+    '/': 'Dashboard',
+    '/testy': 'Testy',
+    '/uceni': 'Učení',
+    '/detail': 'Detail Testů',
+    '/skupiny': 'Skupiny',
+    '/predmety': 'Předměty',
+  };
+
+  const currentPageName = pageNames[location.pathname] || 'Dashboard';
+
+  useEffect(() => {
+    document.title = `${currentPageName} | Sledovač testů`;
+  }, [currentPageName]);
+
   return (
     <header className="flex justify-between items-center mb-8">
       <div>
         <div className="text-brand-textMuted text-xs mb-1 flex gap-1">
           <span>Pages</span>
           <span>/</span>
-          <span className="text-white">Dashboard</span>
+          <span className="text-white">{currentPageName}</span>
         </div>
-        <h2 className="text-xl font-bold text-white">Dashboard</h2>
       </div>
 
       <div className="flex items-center gap-4 text-brand-textMuted">
