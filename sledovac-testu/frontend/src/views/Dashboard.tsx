@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 interface BackendTest {
   test_ID: number;
   name: string;
-  date: string; // "2025-11-20"
+  date: string;
   subject_ID: number;
 }
 
@@ -43,7 +43,6 @@ export const Dashboard = () => {
     fetchData();
   }, []);
 
-  // --- LOGIKA KALENDÁŘE ---
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
   
@@ -54,18 +53,15 @@ export const Dashboard = () => {
 
   const calendarGrid = [];
 
-  // Dny z minulého měsíce (šedé)
   for (let i = startingDay - 1; i >= 0; i--) {
     calendarGrid.push({ day: daysInPrevMonth - i, currentMonth: false, fullDate: null });
   }
 
-  // Dny aktuálního měsíce
   for (let i = 1; i <= daysInMonth; i++) {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
     calendarGrid.push({ day: i, currentMonth: true, fullDate: dateStr });
   }
 
-  // Dny z příštího měsíce (šedé) do konce mřížky (42 políček)
   const remaining = 42 - calendarGrid.length;
   for (let i = 1; i <= remaining; i++) {
     calendarGrid.push({ day: i, currentMonth: false, fullDate: null });
@@ -85,7 +81,6 @@ export const Dashboard = () => {
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
       
       <div className="flex flex-col gap-8">
-        {/* WELCOME CARD */}
         <div className="relative overflow-hidden rounded-[24px] p-8 min-h-[240px] flex flex-col justify-center bg-gradient-to-br from-[#0B0B19] to-[#13113C] border border-white/5 shadow-2xl">
           <div className="relative z-10">
             <p className="text-brand-textMuted text-sm mb-1 font-medium">Welcome back,</p>
@@ -94,7 +89,6 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* KALENDÁŘ */}
         <div className="bg-[#ffffff]/5 backdrop-blur-md rounded-[32px] p-8 w-fit border border-white/5">
           <div className="flex justify-between items-center mb-6">
             <button onClick={() => setViewDate(new Date(year, month - 1))} className="w-10 h-10 rounded-full bg-brand-card flex items-center justify-center hover:bg-white/10 text-white"><ChevronLeft size={20} /></button>
@@ -111,7 +105,6 @@ export const Dashboard = () => {
 
           <div className="grid grid-cols-7 gap-3 text-center text-sm font-medium">
             {calendarGrid.map((cell, i) => {
-              // KONTROLA, JESTLI JE V TENTO DEN TEST
               const hasTest = tests.some(t => t.date === cell.fullDate);
               const isToday = cell.fullDate === new Date().toISOString().split('T')[0];
 
@@ -131,14 +124,12 @@ export const Dashboard = () => {
             })}
           </div>
 
-          {/* LEGENDA */}
           <div className="flex items-center justify-center gap-6 mt-8 font-bold text-sm text-white/80">
              <div className="flex items-center gap-3"><span className="w-8 h-8 rounded-lg bg-[#13113C] border border-brand-red/50 flex items-center justify-center text-xs">1</span><span>Test</span></div>
           </div>
         </div>
       </div>
 
-      {/* PRAVÝ PANEL - TESTY */}
       <div className="bg-[#B0B0B0] rounded-[32px] p-8 text-black min-h-[500px]">
         <h3 className="text-3xl font-extrabold mb-8 tracking-tight">Nadcházející</h3>
         <div className="flex flex-col">
