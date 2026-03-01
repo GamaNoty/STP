@@ -40,7 +40,6 @@ export const TestsDetail = () => {
     <div className="flex flex-col gap-8 w-full max-w-[1400px]">
       
       <div className="flex flex-col gap-4">
-        {/* Přidáno tlačítko Zpět */}
         <button 
           onClick={() => navigate('/testy')}
           className="flex items-center gap-2 text-brand-textMuted hover:text-white transition-colors w-fit text-sm font-bold"

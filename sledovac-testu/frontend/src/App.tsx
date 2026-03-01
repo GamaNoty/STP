@@ -12,7 +12,6 @@ import { SignIn } from './views/SignIn';
 const AppContent = () => {
   const location = useLocation();
   
-  // Seznam cest, kde NECHCEME sidebar ani topnav
   const isAuthPage = location.pathname === '/signin';
 
   if (isAuthPage) {

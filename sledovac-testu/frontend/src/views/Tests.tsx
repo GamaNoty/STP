@@ -20,11 +20,11 @@ export const Tests = () => {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const token = localStorage.getItem('token'); // Vytáhneme tvůj schovaný klíč
+        const token = localStorage.getItem('token');
         
         const response = await fetch('http://localhost:3000/api/tests', {
           headers: {
-            'Authorization': `Bearer ${token}`, // Tady říkáme backendu: "To jsem já, mám propustku!"
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });

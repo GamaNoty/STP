@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, type CalendarEvent } from '../components/Calendar';
 import { Loader2 } from 'lucide-react';
 
-// Přesná struktura podle tvého JSONu
 interface BackendTest {
   test_ID: number;
   subject_ID: number;
   group_ID: number | null;
   user_ID: number;
   name: string;
-  date: string; // "2025-11-20"
+  date: string;
 }
 
 export const CalendarView = () => {
@@ -33,12 +32,11 @@ export const CalendarView = () => {
 
         const data: BackendTest[] = await response.json();
 
-        // Mapování tvého JSONu na formát komponenty Calendar
         const formattedEvents: CalendarEvent[] = data.map((test) => ({
           id: test.test_ID,
-          date: test.date, // Bere přímo "2025-11-20"
+          date: test.date,
           name: test.name,
-          bgColor: 'bg-[#FFB5B5]', // Červená pro testy
+          bgColor: 'bg-[#FFB5B5]',
           textColor: 'text-[#8A1A1A]'
         }));
 
