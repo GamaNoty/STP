@@ -9,6 +9,15 @@ import studyLogsRoutes from './routes/studyLogs.js';
 
 config();
 
+if (!process.env.JWT_SECRET) {
+  console.error('\n======================================================');
+  console.error('FATAL ERROR: Chybi JWT_SECRET v prostredi!');
+  console.error('======================================================');
+  console.error('Aplikace nemuze startovat, protoze chybi tajny klic pro tokeny.');
+  
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
@@ -22,10 +31,11 @@ initDb().then(() => {
   });
 }).catch(err => {
   console.error('Failed to initialize database', err);
+  process.exit(1);
 });
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Sledovač testů a učení API running');
+  res.send('Sledovac testu a uceni API running');
 });
 
 app.use('/api/auth', authRoutes);
