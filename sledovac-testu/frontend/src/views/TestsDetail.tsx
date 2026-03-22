@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   CalendarDays, Clock, MapPin, User, CheckCircle2, Circle, 
-  FileText, Link as LinkIcon, Download, BookOpen, AlertCircle, 
+  FileText, Link as LinkIcon, Download, AlertCircle, 
   ArrowLeft, Loader2, Edit3, Plus 
 } from 'lucide-react';
 
@@ -144,9 +144,6 @@ export const TestsDetail = () => {
               className="bg-[#1C1C24] text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2"
             >
               <Edit3 size={18} /> Upravit detaily
-            </button>
-            <button className="bg-brand-red text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-brand-redHover transition-all shadow-lg shadow-brand-red/20 flex items-center gap-2">
-              <BookOpen size={18} /> Přidat k učení
             </button>
           </div>
         </div>
