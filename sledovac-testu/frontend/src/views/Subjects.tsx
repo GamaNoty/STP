@@ -113,7 +113,7 @@ export const Subjects = () => {
       <SubjectModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={() => fetchSubjects()} // Zavolá tvoji fci na znovunačtení dat!
+        onSuccess={() => fetchSubjects()}
       />
     </div>
   );
