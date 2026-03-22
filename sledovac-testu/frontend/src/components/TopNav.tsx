@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import { Settings, Bell, User } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { Bell, Settings, User } from "lucide-react";
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export const TopNav = () => {
   const location = useLocation();
 
   const pageNames: Record<string, string> = {
-    '/': 'Dashboard',
-    '/testy': 'Testy',
-    '/uceni': 'Učení',
-    '/detail': 'Detail Testů',
-    '/skupiny': 'Skupiny',
-    '/predmety': 'Předměty',
+    "/": "Dashboard",
+    "/testy": "Testy",
+    "/uceni": "Učení",
+    "/detail": "Detail Testů",
+    "/skupiny": "Skupiny",
+    "/predmety": "Předměty",
   };
 
-  const currentPageName = pageNames[location.pathname] || 'Dashboard';
+  const currentPageName = pageNames[location.pathname] || "Dashboard";
 
   useEffect(() => {
     document.title = `${currentPageName} | Sledovač testů`;
@@ -31,10 +31,13 @@ export const TopNav = () => {
       </div>
 
       <div className="flex items-center gap-4 text-brand-textMuted">
-        <button className="flex items-center gap-2 hover:text-white transition-colors text-sm font-medium">
+        <Link
+          to="/signin"
+          className="bg-white/5 hover:bg-white/10 text-white px-6 py-2 rounded-full font-bold transition-colors border border-white/5 inline-flex items-center justify-center"
+        >
           <User size={16} />
           <span>Sign In</span>
-        </button>
+        </Link>
         <button className="hover:text-white transition-colors">
           <Settings size={16} />
         </button>
