@@ -2,10 +2,10 @@ import {
   CalendarDays,
   FileText,
   Home,
-  Layers,
+  //Layers,
   Package,
   Rocket,
-  User,
+  //User,
 } from "lucide-react";
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
@@ -15,12 +15,12 @@ export const Sidebar = () => {
     { name: "Dashboard", icon: Home, path: "/" },
     { name: "Testy", icon: CalendarDays, path: "/testy" },
     { name: "Kalendář", icon: CalendarDays, path: "/kalendar" },
-    { name: "Skupiny", icon: Layers, path: "/skupiny" },
+    //{ name: "Skupiny", icon: Layers, path: "/skupiny" },
     { name: "Předměty", icon: Package, path: "/predmety" },
   ];
 
   const accountNav = [
-    { name: "Profile", icon: User, path: "/profile" },
+    //{ name: "Profile", icon: User, path: "/profile" },
     { name: "Sign In", icon: FileText, path: "/signin" },
     { name: "Sign Up", icon: Rocket, path: "/signin" },
   ];
