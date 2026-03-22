@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CalendarDays, Clock, MapPin, User, CheckCircle2, Circle, FileText, Link as LinkIcon, Download, AlertCircle, ArrowLeft, Loader2, Edit3 } from 'lucide-react';
+import { 
+  CalendarDays, Clock, MapPin, User, CheckCircle2, Circle, 
+  FileText, Link as LinkIcon, Download, BookOpen, AlertCircle, 
+  ArrowLeft, Loader2, Edit3, Plus 
+} from 'lucide-react';
+
 import { TestDetailModal } from '../components/modals/TestDetailModal';
+import { TopicModal } from '../components/modals/TopicModal';
+import { MaterialModal } from '../components/modals/MaterialModal';
 
 interface TestDetailData {
   test_ID: number;
@@ -14,6 +21,20 @@ interface TestDetailData {
   description?: string;
 }
 
+interface Topic {
+  id: number;
+  text: string;
+  done: boolean;
+}
+
+interface Material {
+  id: number;
+  name: string;
+  type: string;
+  size: string;
+  url?: string;
+}
+
 export const TestsDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -22,18 +43,15 @@ export const TestsDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isTopicModalOpen, setIsTopicModalOpen] = useState(false);
+  const [isMaterialModalOpen, setIsMaterialModalOpen] = useState(false);
 
-  const [topics, setTopics] = useState([
-    { id: 1, text: "Lineární rovnice s jednou neznámou", done: true },
-    { id: 2, text: "Kvadratické rovnice a diskriminant", done: true },
-    { id: 3, text: "Soustavy rovnic", done: false },
+  const [topics, setTopics] = useState<Topic[]>([
   ]);
 
-  const materials = [
-    { id: 1, name: "Shrnuti_vzorcu.pdf", type: "pdf", size: "2.4 MB" },
-    { id: 2, name: "Zkusebni_test_2023.docx", type: "doc", size: "1.1 MB" },
-  ];
+  const [materials, setMaterials] = useState<Material[]>([
+  ]);
 
   const fetchTestDetail = useCallback(async () => {
     try {
@@ -71,18 +89,30 @@ export const TestsDetail = () => {
     setTopics(topics.map(t => t.id === topicId ? { ...t, done: !t.done } : t));
   };
 
-  const progress = Math.round((topics.filter(t => t.done).length / topics.length) * 100);
+  const handleAddTopic = (text: string) => {
+    const newTopic: Topic = { id: Date.now(), text, done: false };
+    setTopics([...topics, newTopic]);
+  };
+
+  const handleAddMaterial = (name: string, url: string) => {
+    const newMaterial: Material = { id: Date.now(), name, type: 'link', size: 'Externí', url };
+    setMaterials([...materials, newMaterial]);
+  };
+
+  const progress = topics.length > 0 
+    ? Math.round((topics.filter(t => t.done).length / topics.length) * 100) 
+    : 0;
 
   const getDaysLeft = (testDate: string) => {
     const diff = new Date(testDate).getTime() - new Date().getTime();
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
     if (days === 0) return 'Dnes';
-    if (days === 1) return 'Zitra';
-    return days < 0 ? 'Probehl' : `Za ${days} dny`;
+    if (days === 1) return 'Zítra';
+    return days < 0 ? 'Proběhlo' : `Za ${days} dny`;
   };
 
   if (isLoading) return <div className="flex h-64 items-center justify-center text-brand-red"><Loader2 className="animate-spin" size={48} /></div>;
-  if (error || !testInfo) return <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl text-sm">{error || 'Neco se pokazilo'}</div>;
+  if (error || !testInfo) return <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 p-4 rounded-xl text-sm">{error || 'Něco se pokazilo'}</div>;
 
   return (
     <div className="flex flex-col gap-8 w-full max-w-[1400px]">
@@ -102,7 +132,7 @@ export const TestsDetail = () => {
                 ID Předmětu: {testInfo.subject_ID}
               </span>
               <span className="text-brand-textMuted text-sm flex items-center gap-1">
-                <AlertCircle size={14} className={getDaysLeft(testInfo.date) === 'Probehl' ? 'text-brand-textMuted' : 'text-amber-400'} /> 
+                <AlertCircle size={14} className={getDaysLeft(testInfo.date) === 'Proběhlo' ? 'text-brand-textMuted' : 'text-amber-400'} /> 
                 {getDaysLeft(testInfo.date)}
               </span>
             </div>
@@ -110,16 +140,20 @@ export const TestsDetail = () => {
           </div>
           <div className="flex gap-3">
             <button 
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => setIsEditModalOpen(true)}
               className="bg-[#1C1C24] text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-white/10 transition-all border border-white/10 flex items-center gap-2"
             >
               <Edit3 size={18} /> Upravit detaily
+            </button>
+            <button className="bg-brand-red text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-brand-redHover transition-all shadow-lg shadow-brand-red/20 flex items-center gap-2">
+              <BookOpen size={18} /> Přidat k učení
             </button>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-2">
+        
         <div className="lg:col-span-2 flex flex-col gap-8">
           
           <div className="bg-[#1C1C24]/50 backdrop-blur-md rounded-2xl p-6 border border-white/5 shadow-xl">
@@ -149,7 +183,16 @@ export const TestsDetail = () => {
 
           <div className="bg-[#1C1C24]/50 backdrop-blur-md rounded-2xl p-6 border border-white/5 shadow-xl">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-white">Co se musím naučit</h3>
+              <div className="flex items-center gap-4">
+                <h3 className="text-xl font-bold text-white">Co se musím naučit</h3>
+                <button 
+                  onClick={() => setIsTopicModalOpen(true)}
+                  className="bg-white/5 hover:bg-white/10 text-white p-1.5 rounded-lg transition-colors border border-white/5"
+                  title="Přidat téma"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
               <span className="text-brand-red font-bold text-lg">{progress}% hotovo</span>
             </div>
 
@@ -161,6 +204,9 @@ export const TestsDetail = () => {
             </div>
 
             <div className="flex flex-col gap-3">
+              {topics.length === 0 && (
+                <p className="text-brand-textMuted text-sm italic">Zatím nemáš žádná témata k učení.</p>
+              )}
               {topics.map((topic) => (
                 <div 
                   key={topic.id} onClick={() => toggleTopic(topic.id)}
@@ -180,33 +226,46 @@ export const TestsDetail = () => {
           <div className="bg-[#1C1C24]/50 backdrop-blur-md rounded-2xl p-6 border border-white/5 shadow-xl h-full">
             <h3 className="text-xl font-bold text-white mb-6">Materiály k testu</h3>
             <div className="flex flex-col gap-4">
+              {materials.length === 0 && (
+                <p className="text-brand-textMuted text-sm italic">Žádné materiály k dispozici.</p>
+              )}
               {materials.map((mat) => (
-                <div key={mat.id} className="group flex items-center justify-between p-4 bg-brand-bg/50 rounded-xl border border-white/5 hover:border-brand-red/30 cursor-pointer">
-                  <div className="flex items-center gap-3">
+                <div 
+                  key={mat.id} 
+                  onClick={() => mat.url && window.open(mat.url, '_blank')}
+                  className="group flex items-center justify-between p-4 bg-brand-bg/50 rounded-xl border border-white/5 hover:border-brand-red/30 cursor-pointer transition-colors"
+                >
+                  <div className="flex items-center gap-3 overflow-hidden">
                     <div className="p-2 bg-white/5 rounded-lg text-brand-red group-hover:bg-brand-red/20 transition-colors">
                       {mat.type === 'link' ? <LinkIcon size={20} /> : <FileText size={20} />}
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-white">{mat.name}</span>
+                    <div className="flex flex-col truncate">
+                      <span className="text-sm font-bold text-white truncate">{mat.name}</span>
                       <span className="text-xs text-brand-textMuted">{mat.size}</span>
                     </div>
                   </div>
-                  <Download size={18} className="text-brand-textMuted group-hover:text-white transition-colors" />
+                  {mat.type === 'link' ? (
+                    <LinkIcon size={18} className="text-brand-textMuted group-hover:text-white transition-colors ml-2 min-w-[18px]" />
+                  ) : (
+                    <Download size={18} className="text-brand-textMuted group-hover:text-white transition-colors ml-2 min-w-[18px]" />
+                  )}
                 </div>
               ))}
             </div>
             
-            <button className="w-full mt-6 py-3 rounded-xl border border-dashed border-white/20 text-brand-textMuted hover:text-white hover:border-white/50 hover:bg-white/5 transition-all text-sm font-bold flex items-center justify-center gap-2">
-              <FileText size={16} />
-              Nahrát vlastní poznámky
+            <button 
+              onClick={() => setIsMaterialModalOpen(true)}
+              className="w-full mt-6 py-3 rounded-xl border border-dashed border-white/20 text-brand-textMuted hover:text-white hover:border-white/50 hover:bg-white/5 transition-all text-sm font-bold flex items-center justify-center gap-2"
+            >
+              <Plus size={16} /> Přidat odkaz na materiál
             </button>
           </div>
         </div>
       </div>
 
       <TestDetailModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
         initialData={{
           time: testInfo.time || '',
           room: testInfo.room || '',
@@ -217,6 +276,19 @@ export const TestsDetail = () => {
           setTestInfo(prev => prev ? { ...prev, ...newData } : prev);
         }}
       />
+
+      <TopicModal 
+        isOpen={isTopicModalOpen}
+        onClose={() => setIsTopicModalOpen(false)}
+        onAdd={handleAddTopic}
+      />
+
+      <MaterialModal 
+        isOpen={isMaterialModalOpen}
+        onClose={() => setIsMaterialModalOpen(false)}
+        onAdd={handleAddMaterial}
+      />
+
     </div>
   );
 };
