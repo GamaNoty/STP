@@ -69,7 +69,7 @@ export const CalendarView = () => {
           <p className="text-brand-textMuted text-sm">Přehled tvých studijních povinností</p>
         </div>
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-2 rounded-xl text-sm">
+          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 px-4 py-2 rounded-xl text-sm">
             {error}
           </div>
         )}
