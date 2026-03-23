@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { monthNames, daysOfWeek } from '../utils/constants';
 
 interface BackendTest {
   test_ID: number;
@@ -14,8 +15,6 @@ export const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [viewDate, setViewDate] = useState(new Date());
 
-  const monthNames = ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"];
-  const weekDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +26,7 @@ export const Dashboard = () => {
         }
 
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:3000/api/tests', {
+        const response = await fetch(`${import.meta.env.VITE_URL}/api/tests`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (response.ok) {
@@ -83,9 +82,8 @@ export const Dashboard = () => {
       <div className="flex flex-col gap-8">
         <div className="relative overflow-hidden rounded-[24px] p-8 min-h-[240px] flex flex-col justify-center bg-gradient-to-br from-[#0B0B19] to-[#13113C] border border-white/5 shadow-2xl">
           <div className="relative z-10">
-            <p className="text-brand-textMuted text-sm mb-1 font-medium">Welcome back,</p>
+            <p className="text-brand-textMuted text-sm mb-1 font-medium">Vítej zpět,</p>
             <h2 className="text-4xl font-bold text-white mb-4 tracking-wide">{userName}</h2>
-            <p className="text-brand-textMuted text-sm max-w-[200px] leading-relaxed">Glad to see you again!</p>
           </div>
         </div>
 
@@ -100,7 +98,7 @@ export const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-7 gap-3 mb-4 text-center text-sm font-semibold text-brand-textMuted">
-            {weekDays.map(day => <div key={day}>{day}</div>)}
+            {daysOfWeek.map(day => <div key={day}>{day}</div>)}
           </div>
 
           <div className="grid grid-cols-7 gap-3 text-center text-sm font-medium">

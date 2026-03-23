@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { monthNames, daysOfWeek } from '../utils/constants';
 
 export interface CalendarEvent {
   id: string | number;
@@ -18,12 +19,6 @@ export const Calendar: React.FC<CalendarProps> = ({ events }) => {
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
-
-  const daysOfWeek = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
-  const monthNames = [
-    "Leden", "Únor", "Březen", "Duben", "Květen", "Červen",
-    "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"
-  ];
 
   const firstDayOfMonth = new Date(year, month, 1).getDay();
   const startingDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;

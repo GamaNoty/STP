@@ -21,8 +21,8 @@ export const Sidebar = () => {
 
   const accountNav = [
     //{ name: "Profile", icon: User, path: "/profile" },
-    { name: "Sign In", icon: FileText, path: "/signin" },
-    { name: "Sign Up", icon: Rocket, path: "/signin" },
+    { name: "Přihlásit se", icon: FileText, path: "/signin" },
+    { name: "Odhlásit se", icon: Rocket, path: "/signin" },
   ];
 
   const location = useLocation();
