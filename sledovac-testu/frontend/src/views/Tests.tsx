@@ -25,7 +25,7 @@ export const Tests = () => {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:3000/api/tests", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/tests`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

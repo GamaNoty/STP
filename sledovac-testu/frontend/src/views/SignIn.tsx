@@ -23,9 +23,9 @@ export const SignIn = () => {
     const payload = isLogin
       ? { email, password }
       : { name, email, password, Role_ID: 1 };
-
+      
     try {
-      const response = await fetch(`http://localhost:3000${endpoint}`, {
+      const response = await fetch(`${import.meta.env.VITE_URL}${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

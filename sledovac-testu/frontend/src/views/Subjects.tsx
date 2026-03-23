@@ -20,7 +20,7 @@ export const Subjects = () => {
 
       const token = localStorage.getItem("token");
       
-      const response = await fetch("http://localhost:3000/api/subjects", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/tests`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',

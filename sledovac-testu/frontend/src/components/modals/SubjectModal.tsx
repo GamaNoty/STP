@@ -20,7 +20,7 @@ export const SubjectModal: React.FC<SubjectModalProps> = ({ isOpen, onClose, onS
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/subjects', {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/subjects`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -22,7 +22,7 @@ export const TestModal: React.FC<TestModalProps> = ({ isOpen, onClose, onSuccess
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/tests', {
+      const response = await fetch(`${import.meta.env.VITE_URL}/api/tests`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
