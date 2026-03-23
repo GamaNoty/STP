@@ -8,15 +8,35 @@ const router = Router();
 router.post('/register', async (req: Request, res: Response) => {
 
     const { name, email, password, Role_ID } = req.body;
+    const assignedRole = Role_ID || 1;
 
     try {
       const db = await initDb();
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      await db.run(
+      const result = await db.run(
         'INSERT INTO Users (name, email, password_hash, Role_ID) VALUES (?, ?, ?, ?)',
-        [name, email, hashedPassword, Role_ID || 1]
+        [name, email, hashedPassword, assignedRole]
       );
+  
+      const newUserId = result.lastID;
+
+      const token = jwt.sign(
+        { user_ID: newUserId, Role_ID: assignedRole },
+        process.env.JWT_SECRET as string,
+        { expiresIn: '24h' }
+      );
+  
+      res.status(201).json({ 
+        message: 'Registrace úspěšná',
+        token,
+        user: { 
+          user_ID: newUserId,
+          name: name, 
+          email: email, 
+          Role_ID: assignedRole 
+        }
+      });
   
       res.status(201).json({ message: 'Uživatel byl úspěšně zaregistrován' });
     } catch (error: any) {
