@@ -3,7 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { TopNav } from './components/TopNav';
 import { Dashboard } from './views/Dashboard';
 import { Tests } from './views/Tests';
-import { Groups } from './views/groups';
+import { Groups } from './views/Groups';
 import { CalendarView } from './views/Calendar';
 import { TestsDetail } from './views/TestsDetail';
 import { Subjects } from './views/Subjects';
