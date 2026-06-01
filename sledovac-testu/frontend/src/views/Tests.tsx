@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Plus, Search, X } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom"; // PŘIDÁNO: useSearchParams
 import { TestModal } from "../components/modals/TestModal";
 
 type Test = {
@@ -16,6 +16,7 @@ type SortColumn = 'name' | 'created_at' | 'author' | 'subject' | 'date';
 
 export const Tests = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [tests, setTests] = useState<Test[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -24,7 +25,8 @@ export const Tests = () => {
   const [userName, setUserName] = useState("Student");
 
   const [searchName, setSearchName] = useState("");
-  const [searchDate, setSearchDate] = useState("");
+  
+  const [searchDate, setSearchDate] = useState(searchParams.get("date") || "");
 
   const [sortColumn, setSortColumn] = useState<SortColumn>('created_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -69,6 +71,13 @@ export const Tests = () => {
       }
     }
   }, [fetchTests]);
+
+  useEffect(() => {
+    const dateParam = searchParams.get("date");
+    if (dateParam !== null && dateParam !== searchDate) {
+      setSearchDate(dateParam);
+    }
+  }, [searchParams]);
 
   const handleSort = (column: SortColumn) => {
     if (sortColumn === column) {
@@ -162,14 +171,25 @@ export const Tests = () => {
           <input
             type="date"
             value={searchDate}
-            onChange={(e) => setSearchDate(e.target.value)}
+            onChange={(e) => {
+              setSearchDate(e.target.value);
+              if (e.target.value) {
+                setSearchParams({ date: e.target.value });
+              } else {
+                setSearchParams({});
+              }
+            }}
             className="w-full md:w-auto bg-[#0A0A10]/50 border border-white/10 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-brand-red/50 transition-colors"
             style={{ colorScheme: 'dark' }}
           />
 
           {(searchName || searchDate) && (
             <button 
-              onClick={() => { setSearchName(""); setSearchDate(""); }}
+              onClick={() => { 
+                setSearchName(""); 
+                setSearchDate(""); 
+                setSearchParams({});
+              }}
               className="flex items-center gap-2 text-brand-textMuted hover:text-brand-red transition-colors p-2"
               title="Zrušit filtry"
             >
@@ -257,7 +277,11 @@ export const Tests = () => {
               <p>Zadaným filtrům neodpovídá žádný test.</p>
               {(searchName || searchDate) && (
                 <button 
-                  onClick={() => { setSearchName(""); setSearchDate(""); }}
+                  onClick={() => { 
+                    setSearchName(""); 
+                    setSearchDate(""); 
+                    setSearchParams({});
+                  }}
                   className="text-brand-red hover:underline mt-2 text-sm"
                 >
                   Zrušit filtry
