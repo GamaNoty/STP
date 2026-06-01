@@ -46,6 +46,7 @@ export async function initDb(): Promise<Database> {
       subject_ID INTEGER PRIMARY KEY AUTOINCREMENT,
       user_ID INTEGER,
       name TEXT NOT NULL,
+      color TEXT,
       FOREIGN KEY (user_ID) REFERENCES Users(user_ID)
     );
 

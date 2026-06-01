@@ -24,14 +24,14 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
 });
 
 router.post('/', authenticateToken, validate(SubjectSchema), async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, color } = req.body;
   const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
     const result = await db.run(
-      'INSERT INTO Subjects (name, user_ID) VALUES (?, ?)',
-      [name, user_ID]
+      'INSERT INTO Subjects (name, user_ID, color) VALUES (?, ?, ?)',
+      [name, user_ID, color]
     );
     res.status(201).json({ subject_ID: result.lastID, name, user_ID });
   } catch (error) {
