@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormModalTemplate } from './FormModalTemplate';
+import { ChevronDown } from 'lucide-react';
+
+interface Subject {
+  subject_ID: number;
+  name: string;
+}
 
 interface TestModalProps {
   isOpen: boolean;
@@ -14,6 +20,28 @@ export const TestModal: React.FC<TestModalProps> = ({ isOpen, onClose, onSuccess
   const [groupId, setGroupId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const fetchSubjects = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${import.meta.env.VITE_URL}/api/subjects`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setSubjects(data);
+          }
+        } catch (err) {
+          console.error("Chyba při načítání předmětů:", err);
+        }
+      };
+      fetchSubjects();
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,14 +115,34 @@ export const TestModal: React.FC<TestModalProps> = ({ isOpen, onClose, onSuccess
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="text-xs font-bold text-brand-textMuted uppercase">ID Předmětu</label>
-        <input 
-          type="number" required value={subjectId} onChange={(e) => setSubjectId(e.target.value)}
-          className="bg-[#0A0A10]/50 border border-white/10 text-white rounded-xl py-3 px-4 focus:outline-none focus:border-brand-red/50"
-          placeholder="Např. 1"
-          min="1"
-        />
+        <label className="text-xs font-bold text-brand-textMuted uppercase">Předmět</label>
+        <div className="relative">
+          <select 
+            required 
+            value={subjectId} 
+            onChange={(e) => setSubjectId(e.target.value)}
+            className="w-full bg-[#0A0A10]/50 border border-white/10 text-white rounded-xl py-3 pl-4 pr-10 focus:outline-none focus:border-brand-red/50 appearance-none cursor-pointer"
+          >
+            <option value="" disabled className="bg-[#1C1C24] text-brand-textMuted">
+              Vyber předmět...
+            </option>
+            {subjects.map((subject) => (
+              <option 
+                key={subject.subject_ID} 
+                value={subject.subject_ID} 
+                className="bg-[#1C1C24] text-white py-2"
+              >
+                {subject.name}
+              </option>
+            ))}
+          </select>
+          
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-textMuted">
+            <ChevronDown size={18} />
+          </div>
+        </div>
       </div>
+
     </FormModalTemplate>
   );
 };

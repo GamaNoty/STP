@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { monthNames, daysOfWeek } from '../utils/constants';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface BackendTest {
   test_ID: number;
@@ -10,11 +11,11 @@ interface BackendTest {
 }
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const [tests, setTests] = useState<BackendTest[]>([]);
   const [userName, setUserName] = useState('Student');
   const [isLoading, setIsLoading] = useState(true);
   const [viewDate, setViewDate] = useState(new Date());
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,6 +110,11 @@ export const Dashboard = () => {
               return (
                 <div 
                   key={i} 
+                  onClick={() => {
+                    if (cell.currentMonth && cell.fullDate) {
+                      navigate(`/testy?date=${cell.fullDate}`);
+                    }
+                  }}
                   className={`w-12 h-12 flex items-center justify-center rounded-xl transition-all border border-white/5 
                     ${!cell.currentMonth ? 'text-white/10' : 'text-white'}
                     ${hasTest ? 'bg-[#13113C] border-brand-red/50 shadow-[0_0_10px_rgba(229,57,53,0.2)]' : 'bg-brand-card'}
@@ -132,13 +138,17 @@ export const Dashboard = () => {
         <h3 className="text-3xl font-extrabold mb-8 tracking-tight">Nadcházející</h3>
         <div className="flex flex-col">
           {tests.length > 0 ? tests.map((test, index) => (
-            <div key={test.test_ID} className={`flex justify-between items-center py-5 ${index !== tests.length - 1 ? 'border-b border-black/20' : ''}`}>
+            <Link 
+              to={`/testy/${test.test_ID}`} 
+              key={test.test_ID} 
+              className={`flex justify-between items-center py-5 hover:opacity-60 transition-opacity cursor-pointer ${index !== tests.length - 1 ? 'border-b border-black/20' : ''}`}
+            >
               <span className="font-bold text-lg">{test.name}</span>
               <div className="text-right">
-                <div className="font-extrabold text-black">Předmět ID: {test.subject_ID}</div>
+                <div className="font-extrabold text-black">Předmět name: {test.name}</div>
                 <div className="text-sm font-semibold text-black/60">{getTimeLeft(test.date)}</div>
               </div>
-            </div>
+            </Link>
           )) : (
             <p className="text-black/40 italic">Žádné testy k zobrazení...</p>
           )}

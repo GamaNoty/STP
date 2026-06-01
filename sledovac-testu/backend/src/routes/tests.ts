@@ -19,7 +19,12 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
   try {
     const db = await initDb();
     const user_ID = req.user?.user_ID;
-    const tests = await db.all('SELECT * FROM Tests WHERE user_ID = ?', [user_ID]);
+    const tests = await db.all(`
+      SELECT Tests.*, Subjects.name AS subject_name 
+      FROM Tests 
+      LEFT JOIN Subjects ON Tests.subject_ID = Subjects.subject_ID 
+      WHERE Tests.user_ID = ?
+    `, [user_ID]);
     res.json(tests);
   } catch (error) {
     res.status(500).json({ message: 'Chyba při načítání testů', error });

@@ -38,7 +38,6 @@ router.post('/register', async (req: Request, res: Response) => {
         }
       });
   
-      res.status(201).json({ message: 'Uživatel byl úspěšně zaregistrován' });
     } catch (error: any) {
       if (error.errno === 19) {
         return res.status(400).json({ message: 'Tento e-mail se již používá' });

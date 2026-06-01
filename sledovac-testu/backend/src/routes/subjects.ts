@@ -24,14 +24,14 @@ router.get('/', authenticateToken, async (req: Request, res: Response) => {
 });
 
 router.post('/', authenticateToken, validate(SubjectSchema), async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, color } = req.body;
   const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
     const result = await db.run(
-      'INSERT INTO Subjects (name, user_ID) VALUES (?, ?)',
-      [name, user_ID]
+      'INSERT INTO Subjects (name, user_ID, color) VALUES (?, ?, ?)',
+      [name, user_ID, color]
     );
     res.status(201).json({ subject_ID: result.lastID, name, user_ID });
   } catch (error) {
@@ -40,15 +40,15 @@ router.post('/', authenticateToken, validate(SubjectSchema), async (req: Request
 });
 
 router.put('/:id', authenticateToken, async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, color } = req.body;
   const { id } = req.params;
   const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
     const result = await db.run(
-      'UPDATE Subjects SET name = ? WHERE subject_ID = ? AND user_ID = ?',
-      [name, id, user_ID]
+      'UPDATE Subjects SET name = ?, color = ? WHERE subject_ID = ? AND user_ID = ?',
+      [name, color, id, user_ID]
     );
 
     if (result.changes === 0) {
@@ -75,7 +75,12 @@ router.delete('/:id', authenticateToken, async (req: Request, res: Response) => 
       return res.status(404).json({ message: 'Předmět nenalezen nebo nemáte oprávnění' });
     }
     res.json({ message: 'Předmět smazán' });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.errno === 19 || error.code === 'SQLITE_CONSTRAINT') {
+      return res.status(400).json({ 
+        message: 'Tento předmět nelze smazat, protože k němu už máš vytvořené testy. Nejprve smaž dané testy.' 
+      });
+    }
     res.status(500).json({ message: 'Chyba při mazání předmětu', error });
   }
 });
