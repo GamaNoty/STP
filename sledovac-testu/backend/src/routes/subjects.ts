@@ -40,15 +40,15 @@ router.post('/', authenticateToken, validate(SubjectSchema), async (req: Request
 });
 
 router.put('/:id', authenticateToken, async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, color } = req.body;
   const { id } = req.params;
   const user_ID = req.user?.user_ID;
 
   try {
     const db = await initDb();
     const result = await db.run(
-      'UPDATE Subjects SET name = ? WHERE subject_ID = ? AND user_ID = ?',
-      [name, id, user_ID]
+      'UPDATE Subjects SET name = ?, color = ? WHERE subject_ID = ? AND user_ID = ?',
+      [name, color, id, user_ID]
     );
 
     if (result.changes === 0) {

@@ -1,6 +1,6 @@
 import { BookOpen, Loader2, Plus } from "lucide-react";
 import React, { useEffect, useState, useCallback } from "react";
-import { SubjectModal } from "../components/modals/SubjectModal"
+import { SubjectDetailModal } from "../components/modals/SubjectDetailModal";
 
 interface Subject {
   subject_ID: number;
@@ -13,11 +13,12 @@ export const Subjects = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const [selectedSubject, setSelectedSubject] = useState<Subject | undefined>(undefined);
 
   const fetchSubjects = useCallback(async () => {
     try {
       setError("");
-
       const token = localStorage.getItem("token");
       
       const response = await fetch(`${import.meta.env.VITE_URL}/api/subjects`, {
@@ -42,6 +43,16 @@ export const Subjects = () => {
     fetchSubjects();
   }, [fetchSubjects]);
 
+  const handleCreateNew = () => {
+    setSelectedSubject(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (subject: Subject) => {
+    setSelectedSubject(subject);
+    setIsModalOpen(true);
+  };
+
   if (isLoading)
     return (
       <div className="flex h-64 items-center justify-center text-brand-red">
@@ -53,19 +64,14 @@ export const Subjects = () => {
     <div className="flex flex-col gap-8 w-full max-w-[1200px]">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-3xl font-bold text-white tracking-wide">
-            Moje předměty
-          </h2>
-          <p className="text-brand-textMuted text-sm">
-            Správa tvých studijních oborů
-          </p>
+          <h2 className="text-3xl font-bold text-white tracking-wide">Moje předměty</h2>
+          <p className="text-brand-textMuted text-sm">Správa tvých studijních oborů</p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleCreateNew}
           className="flex items-center gap-2 bg-brand-red text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-brand-redHover transition-colors shadow-lg shadow-brand-red/20"
         >
-          <Plus size={18} />
-          Přidat předmět
+          <Plus size={18} /> Přidat předmět
         </button>
       </div>
 
@@ -80,16 +86,15 @@ export const Subjects = () => {
           subjects.map((subject) => (
             <div
               key={subject.subject_ID}
-              className="bg-[#1C1C24]/60 backdrop-blur-md p-6 rounded-[24px] border border-white/5 hover:border-brand-red/30 transition-all group cursor-default"
+              onClick={() => handleEdit(subject)}
+              className="bg-[#1C1C24]/60 backdrop-blur-md p-6 rounded-[24px] border border-white/5 hover:border-brand-red/30 transition-all group cursor-pointer" // PŘIDÁNO cursor-pointer
             >
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-brand-card rounded-2xl border border-white/5 text-brand-red group-hover:scale-110 transition-transform">
                   <BookOpen size={24} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-white font-bold text-lg">
-                    {subject.name}
-                  </span>
+                  <span className="text-white font-bold text-lg">{subject.name}</span>
                   <span className="text-brand-textMuted text-xs uppercase tracking-widest font-bold">
                     ID: {subject.subject_ID}
                   </span>
@@ -97,23 +102,23 @@ export const Subjects = () => {
               </div>
 
               <div
-                className="h-1 w-full mt-6 rounded-full bg-brand-red opacity-20 group-hover:opacity-100 transition-opacity"
-                style={{ backgroundColor: subject.color }}
+                className="h-1 w-full mt-6 rounded-full opacity-50 group-hover:opacity-100 transition-opacity"
+                style={{ backgroundColor: subject.color || '#E53935' }}
               ></div>
             </div>
           ))
         ) : (
           <div className="col-span-full py-20 text-center bg-[#1C1C24]/20 rounded-[32px] border border-dashed border-white/10">
-            <p className="text-brand-textMuted">
-              Zatím nemáš žádné předměty. Přidej první!
-            </p>
+            <p className="text-brand-textMuted">Zatím nemáš žádné předměty. Přidej první!</p>
           </div>
         )}
       </div>
-      <SubjectModal
+      
+      <SubjectDetailModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={() => fetchSubjects()}
+        subject={selectedSubject} 
       />
     </div>
   );
