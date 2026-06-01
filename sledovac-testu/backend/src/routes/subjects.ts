@@ -75,7 +75,12 @@ router.delete('/:id', authenticateToken, async (req: Request, res: Response) => 
       return res.status(404).json({ message: 'Předmět nenalezen nebo nemáte oprávnění' });
     }
     res.json({ message: 'Předmět smazán' });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.errno === 19 || error.code === 'SQLITE_CONSTRAINT') {
+      return res.status(400).json({ 
+        message: 'Tento předmět nelze smazat, protože k němu už máš vytvořené testy. Nejprve smaž dané testy.' 
+      });
+    }
     res.status(500).json({ message: 'Chyba při mazání předmětu', error });
   }
 });
