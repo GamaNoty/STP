@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { monthNames, daysOfWeek } from '../utils/constants';
+import { Link } from 'react-router-dom';
 
 interface BackendTest {
   test_ID: number;
@@ -132,13 +133,17 @@ export const Dashboard = () => {
         <h3 className="text-3xl font-extrabold mb-8 tracking-tight">Nadcházející</h3>
         <div className="flex flex-col">
           {tests.length > 0 ? tests.map((test, index) => (
-            <div key={test.test_ID} className={`flex justify-between items-center py-5 ${index !== tests.length - 1 ? 'border-b border-black/20' : ''}`}>
+            <Link 
+              to={`/testy/${test.test_ID}`} 
+              key={test.test_ID} 
+              className={`flex justify-between items-center py-5 hover:opacity-60 transition-opacity cursor-pointer ${index !== tests.length - 1 ? 'border-b border-black/20' : ''}`}
+            >
               <span className="font-bold text-lg">{test.name}</span>
               <div className="text-right">
                 <div className="font-extrabold text-black">Předmět ID: {test.subject_ID}</div>
                 <div className="text-sm font-semibold text-black/60">{getTimeLeft(test.date)}</div>
               </div>
-            </div>
+            </Link>
           )) : (
             <p className="text-black/40 italic">Žádné testy k zobrazení...</p>
           )}
